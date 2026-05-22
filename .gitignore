@@ -1,0 +1,45 @@
+# ── Secrets & credentials ────────────────────────────────────────────────────
+.env
+.dashboard_auth
+.dashboard_key
+
+# ── Security & audit logs ────────────────────────────────────────────────────
+security.log
+security_archive_*.log
+api_log.txt
+
+# ── Personal data & generated documents ──────────────────────────────────────
+/resumes/
+/Cover Letters/
+/output/
+/logs/
+job_tracker.csv
+job_tracker.csv.bak
+master_resume.json
+master_resume.txt
+bio.txt
+job_description.txt
+
+# ── Encrypted file artifacts ─────────────────────────────────────────────────
+*.enc
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# ── OS artifacts ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+
+# ── Editor artifacts ─────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo

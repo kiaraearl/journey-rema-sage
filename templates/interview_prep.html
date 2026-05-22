@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interview Prep — {{ company }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #0a0a0f;
+      --panel-bg:   #0d0d1a;
+      --panel-bg2:  #08080f;
+      --pink:       #ff2d78;
+      --pink-dim:   rgba(255,45,120,0.35);
+      --green:      #39ff14;
+      --yellow:     #f5d800;
+      --teal:       #00bcd4;
+      --text:       #dde0ec;
+      --dim:        #7a7d99;
+      --font-pixel: 'Press Start 2P', monospace;
+      --font-mono:  'Share Tech Mono', 'Courier New', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--font-mono); min-height: 100vh; }
+
+    .scanlines {
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.11) 2px, rgba(0,0,0,0.11) 4px);
+      pointer-events: none; z-index: 9999;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex; align-items: center; gap: 20px;
+      padding: 14px 28px; background: var(--panel-bg2);
+      border-bottom: 2px solid var(--pink);
+      box-shadow: 0 2px 24px rgba(255,45,120,0.28);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .back-btn {
+      font-family: var(--font-mono); font-size: 12px;
+      background: transparent; border: 1px solid rgba(255,45,120,0.4);
+      color: var(--dim); padding: 7px 16px; border-radius: 2px;
+      cursor: pointer; text-decoration: none;
+      transition: color 0.15s, border-color 0.15s; white-space: nowrap;
+    }
+    .back-btn:hover { color: var(--pink); border-color: var(--pink); }
+    .hdr-info { display: flex; flex-direction: column; gap: 4px; }
+    .hdr-title { font-family: var(--font-pixel); font-size: 9px; color: var(--green); text-shadow: 0 0 12px rgba(57,255,20,0.6); letter-spacing: 2px; }
+    .hdr-sub { font-family: var(--font-mono); font-size: 12px; color: var(--dim); }
+    .hdr-company { color: var(--pink); }
+
+    /* ── Main layout ── */
+    main { max-width: 860px; margin: 0 auto; padding: 32px 20px 60px; display: flex; flex-direction: column; gap: 28px; }
+
+    /* ── Section card ── */
+    .section-card {
+      background: var(--panel-bg); border: 1px solid rgba(57,255,20,0.2);
+      border-radius: 4px; overflow: hidden;
+      box-shadow: 0 0 20px rgba(57,255,20,0.04);
+    }
+    .section-hdr {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 18px; border-bottom: 1px solid rgba(57,255,20,0.1);
+      background: rgba(57,255,20,0.02);
+    }
+    .section-title { font-family: var(--font-pixel); font-size: 7px; color: var(--green); letter-spacing: 2px; text-shadow: 0 0 8px rgba(57,255,20,0.4); }
+    .copy-btn {
+      font-family: var(--font-mono); font-size: 11px;
+      background: transparent; border: 1px solid rgba(57,255,20,0.4);
+      color: var(--green); padding: 4px 14px; border-radius: 2px;
+      cursor: pointer; transition: background 0.15s, color 0.15s;
+    }
+    .copy-btn:hover { background: rgba(57,255,20,0.1); }
+    .copy-btn.copied { border-color: var(--teal); color: var(--teal); }
+    .section-body { padding: 20px; font-size: 13px; line-height: 1.7; min-height: 80px; }
+
+    /* ── Pixel loader ── */
+    .loading-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 36px 20px; }
+    .pixel-loader { display: flex; gap: 5px; align-items: flex-end; height: 24px; }
+    .pixel-loader span {
+      display: block; width: 7px; background: var(--green);
+      animation: pxbar 1.1s ease-in-out infinite;
+    }
+    .pixel-loader span:nth-child(1) { animation-delay: 0.00s; height: 8px; }
+    .pixel-loader span:nth-child(2) { animation-delay: 0.15s; height: 14px; }
+    .pixel-loader span:nth-child(3) { animation-delay: 0.30s; height: 22px; }
+    .pixel-loader span:nth-child(4) { animation-delay: 0.45s; height: 14px; }
+    .pixel-loader span:nth-child(5) { animation-delay: 0.60s; height: 8px; }
+    @keyframes pxbar {
+      0%, 100% { opacity: 0.15; }
+      50%       { opacity: 1; box-shadow: 0 0 8px var(--green); }
+    }
+    .loading-label { font-family: var(--font-pixel); font-size: 6px; color: var(--dim); letter-spacing: 2px; animation: fade-pulse 1.4s ease-in-out infinite; }
+    @keyframes fade-pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
+    .waiting-msg { font-family: var(--font-mono); font-size: 12px; color: var(--dim); font-style: italic; text-align: center; padding: 28px 20px; }
+
+    /* ── Questions ── */
+    .q-item {
+      margin-bottom: 12px; padding: 10px 14px;
+      background: rgba(0,0,0,0.25); border-left: 2px solid var(--pink);
+      border-radius: 0 3px 3px 0;
+    }
+    .q-num { font-family: var(--font-pixel); font-size: 6px; color: var(--pink); margin-bottom: 5px; letter-spacing: 1px; }
+    .q-text { font-family: var(--font-mono); font-size: 12px; color: var(--text); line-height: 1.65; }
+
+    /* ── Answers ── */
+    .a-item {
+      margin-bottom: 18px; padding: 14px 16px;
+      background: rgba(57,255,20,0.03); border: 1px solid rgba(57,255,20,0.14);
+      border-radius: 3px;
+    }
+    .a-num { font-family: var(--font-pixel); font-size: 6px; color: var(--green); margin-bottom: 7px; letter-spacing: 1px; }
+    .a-text { font-family: var(--font-mono); font-size: 12px; color: var(--text); line-height: 1.75; white-space: pre-wrap; }
+
+    /* ── Ask Them ── */
+    .ask-item {
+      margin-bottom: 10px; padding: 10px 14px;
+      background: rgba(0,188,212,0.04); border-left: 2px solid rgba(0,188,212,0.5);
+      border-radius: 0 3px 3px 0;
+    }
+    .ask-num { font-family: var(--font-pixel); font-size: 6px; color: var(--teal); margin-bottom: 4px; letter-spacing: 1px; }
+    .ask-text { font-family: var(--font-mono); font-size: 12px; color: var(--teal); line-height: 1.65; }
+
+    /* ── Error ── */
+    .err-msg { font-family: var(--font-mono); font-size: 12px; color: #f44336; padding: 18px; }
+  </style>
+</head>
+<body>
+<div class="scanlines"></div>
+
+<header>
+  <a href="/" class="back-btn">← Dashboard</a>
+  <div class="hdr-info">
+    <div class="hdr-title">⚔ INTERVIEW PREP</div>
+    <div class="hdr-sub"><span class="hdr-company">{{ company }}</span> — {{ role }}</div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── Section 1: Questions ── -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-title">❓ EXPECT THESE QUESTIONS</span>
+      <button class="copy-btn" id="copy-q-btn" onclick="copySection('q-body','copy-q-btn')">⊕ Copy All</button>
+    </div>
+    <div class="section-body" id="q-body">
+      <div class="loading-wrap">
+        <div class="pixel-loader"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="loading-label">GENERATING QUESTIONS...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 2: Answers ── -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-title">⚔ YOUR ANSWERS</span>
+      <button class="copy-btn" id="copy-a-btn" onclick="copySection('a-body','copy-a-btn')">⊕ Copy All</button>
+    </div>
+    <div class="section-body" id="a-body">
+      <div class="waiting-msg">Waiting for questions first...</div>
+    </div>
+  </div>
+
+  <!-- ── Section 3: Ask Them ── -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <span class="section-title">💬 ASK THEM THIS</span>
+      <button class="copy-btn" id="copy-ask-btn" onclick="copySection('ask-body','copy-ask-btn')">⊕ Copy All</button>
+    </div>
+    <div class="section-body" id="ask-body">
+      <div class="loading-wrap">
+        <div class="pixel-loader"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="loading-label">GENERATING QUESTIONS...</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const COMPANY = {{ company | tojson }};
+  const ROLE    = {{ role    | tojson }};
+
+  function loadingHtml(label) {
+    return `<div class="loading-wrap">
+      <div class="pixel-loader"><span></span><span></span><span></span><span></span><span></span></div>
+      <div class="loading-label">${label}</div>
+    </div>`;
+  }
+
+  function escHtml(s) {
+    return String(s||'')
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+  }
+
+  function parseBlocks(text) {
+    const blocks = [];
+    let cur = null;
+    for (const raw of text.split('\n')) {
+      const line = raw.trim();
+      const m = line.match(/^(\d+)[.)]\s+([\s\S]+)/);
+      if (m) {
+        if (cur) blocks.push(cur);
+        cur = { num: m[1], text: m[2] };
+      } else if (cur && line) {
+        cur.text += '\n' + line;
+      }
+    }
+    if (cur) blocks.push(cur);
+    return blocks;
+  }
+
+  function renderQuestions(text) {
+    const items = parseBlocks(text);
+    if (!items.length) return `<div class="q-text">${escHtml(text)}</div>`;
+    return items.map(it =>
+      `<div class="q-item">
+        <div class="q-num">QUESTION ${it.num}</div>
+        <div class="q-text">${escHtml(it.text)}</div>
+      </div>`
+    ).join('');
+  }
+
+  function renderAnswers(text) {
+    const items = parseBlocks(text);
+    if (!items.length) return `<div class="a-text">${escHtml(text)}</div>`;
+    return items.map(it =>
+      `<div class="a-item">
+        <div class="a-num">ANSWER ${it.num}</div>
+        <div class="a-text">${escHtml(it.text)}</div>
+      </div>`
+    ).join('');
+  }
+
+  function renderAskThem(text) {
+    const items = parseBlocks(text);
+    if (!items.length) return `<div class="ask-text">${escHtml(text)}</div>`;
+    return items.map(it =>
+      `<div class="ask-item">
+        <div class="ask-num">QUESTION ${it.num}</div>
+        <div class="ask-text">${escHtml(it.text)}</div>
+      </div>`
+    ).join('');
+  }
+
+  async function loadQuestions() {
+    try {
+      const r = await fetch('/api/prep/questions', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({company: COMPANY, role: ROLE}),
+      });
+      const d = await r.json();
+      if (d.error) throw new Error(d.error);
+      document.getElementById('q-body').innerHTML = renderQuestions(d.text);
+      loadAnswers(d.text);
+    } catch(e) {
+      document.getElementById('q-body').innerHTML = `<div class="err-msg">Error: ${escHtml(String(e))}</div>`;
+      document.getElementById('a-body').innerHTML = `<div class="err-msg">Cannot load answers — questions failed.</div>`;
+    }
+  }
+
+  async function loadAnswers(questions) {
+    document.getElementById('a-body').innerHTML = loadingHtml('WRITING YOUR ANSWERS...');
+    try {
+      const r = await fetch('/api/prep/answers', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({company: COMPANY, role: ROLE, questions}),
+      });
+      const d = await r.json();
+      if (d.error) throw new Error(d.error);
+      document.getElementById('a-body').innerHTML = renderAnswers(d.text);
+    } catch(e) {
+      document.getElementById('a-body').innerHTML = `<div class="err-msg">Error: ${escHtml(String(e))}</div>`;
+    }
+  }
+
+  async function loadAskThem() {
+    try {
+      const r = await fetch('/api/prep/ask-them', {
+        method: 'POST', headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({company: COMPANY, role: ROLE}),
+      });
+      const d = await r.json();
+      if (d.error) throw new Error(d.error);
+      document.getElementById('ask-body').innerHTML = renderAskThem(d.text);
+    } catch(e) {
+      document.getElementById('ask-body').innerHTML = `<div class="err-msg">Error: ${escHtml(String(e))}</div>`;
+    }
+  }
+
+  function copySection(bodyId, btnId) {
+    const text = (document.getElementById(bodyId).innerText || '').trim();
+    const btn  = document.getElementById(btnId);
+    const reset = () => { btn.textContent = '⊕ Copy All'; btn.classList.remove('copied'); };
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✔ Copied!'; btn.classList.add('copied');
+      setTimeout(reset, 2000);
+    }).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); btn.textContent = '✔ Copied!'; btn.classList.add('copied'); setTimeout(reset, 2000); } catch(_){}
+      document.body.removeChild(ta);
+    });
+  }
+
+  // Q and AskThem fire in parallel; Answers fires inside loadQuestions after Q resolves
+  loadQuestions();
+  loadAskThem();
+</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+# ============================================================
+#  requirements.txt — Journey, Rema & Sage
+#  Install all dependencies with: pip install -r requirements.txt
+# ============================================================
+
+# AI / LLM
+anthropic>=0.25.0
+
+# HTTP requests
+requests>=2.31.0
+
+# Web scraping / Apify
+apify-client>=1.6.0
+
+# Flask dashboard
+flask>=3.0.0
+
+# Word document generation
+python-docx>=1.1.0
+
+# Environment variable loading
+python-dotenv>=1.0.0
+
+# Data handling (standard library — listed for clarity)
+# csv, json, os, pathlib — no install needed
+
+# Optional: used if geolocation/distance filtering is active
+geopy>=2.4.0

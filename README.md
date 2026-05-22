@@ -115,7 +115,7 @@ This project demonstrates:
 CompTIA A+ Certified | WGU B.S. Cybersecurity & Information Assurance (Expected 2027)
 📧 kimearls24@outlook.com
 📍 Houston, TX
-🔗 [Portfolio](https://your-portfolio-url-here)
+🔗 [Portfolio](https://kiaraearl.github.io/)
 
 ---
 
